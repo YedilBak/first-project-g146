@@ -19,6 +19,7 @@
             <th>RATING</th>
             <th>IIN</th>
             <th style="width: 8%;">DETAILS</th>
+            <th style="width: 8%;">DELETE</th>
         </tr>
         </thead>
         <tbody>
@@ -28,7 +29,11 @@
             <td th:text="${user.city}"></td>
             <td th:text="${user.rating}"></td>
             <td th:text="${user.iin}"></td>
-            <td><a class="btn btn-secondary btn-sm">DETAILS</a></td>
+            <td><a class="btn btn-secondary btn-sm" th:href="@{'/details/' + ${user.id}}">DETAILS</a></td>
+            <form action="/delete" method="post">
+                <input type="hidden" th:name="id" th:value="${user.id}">
+                <td> <button class="btn btn-danger btn-sm">DELETE</button> </td>
+            </form>
         </tr>
         </tbody>
     </table>

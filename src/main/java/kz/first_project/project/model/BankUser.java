@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class BankUser {
 
-    private Integer id;
+    private int id;
     private String fullName;
     private String city;
     private double rating;
