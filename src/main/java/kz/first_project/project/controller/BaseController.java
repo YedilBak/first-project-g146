@@ -1,5 +1,6 @@
 package kz.first_project.project.controller;
 
+import kz.first_project.project.db.DBConnector;
 import kz.first_project.project.db.DBManager;
 import kz.first_project.project.model.BankUser;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,7 @@ public class BaseController {
     @GetMapping(value = "/") //localhost:8080/
     public String getMainPage(Model model){
 
-        model.addAttribute("users", DBManager.getUsers());
+        model.addAttribute("users", DBConnector.getAllUsersFromBase());
 
         return "index";
     }
@@ -42,7 +43,7 @@ public class BaseController {
     public String getUserByID(Model model,
                               @PathVariable int id){
 
-        model.addAttribute("user", DBManager.getUserByID(id));
+        model.addAttribute("user", DBConnector.findBankUserById(id));
 
         return "details-page";
     }
