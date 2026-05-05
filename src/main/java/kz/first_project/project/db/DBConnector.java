@@ -14,7 +14,7 @@ public class DBConnector {
     private static Connection connection;
     private static String login = "postgres";
     private static String password = "postgres";
-    private static String url = "jdbc:postgresql://localhost:5433/G146";
+    private static String url = "jdbc:postgresql://localhost:5436/G146?currentSchema=bank";
 
     static {
         try {
@@ -32,7 +32,7 @@ public class DBConnector {
 
         try {
 
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM bank_users");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM bank_users ORDER BY id ASC");
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -83,6 +83,64 @@ public class DBConnector {
 
         return user;
 
+    }
+
+    public static void addUserToBase(BankUser bankUser){
+
+        try {
+
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO bank.bank_users(full_name, city "+
+                    ", rating, iin) VALUES (?, ?, ?, ?)");
+
+            statement.setString(1, bankUser.getFullName());
+            statement.setString(2, bankUser.getCity());
+            statement.setDouble(3, bankUser.getRating());
+            statement.setLong(4, bankUser.getIin());
+
+            statement.executeUpdate();
+            statement.close();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateUser(BankUser bankUser){
+
+        try {
+
+            PreparedStatement statement = connection.prepareStatement("UPDATE bank.bank_users SET " +
+                    "full_name=?, city=?, rating=?, iin=? WHERE id=?");
+
+            statement.setString(1, bankUser.getFullName());
+            statement.setString(2, bankUser.getCity());
+            statement.setDouble(3, bankUser.getRating());
+            statement.setLong(4, bankUser.getIin());
+            statement.setInt(5, bankUser.getId());
+
+            statement.executeUpdate();
+            statement.close();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void deleteUser(int id){
+
+        try {
+
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM bank.bank_users WHERE id=?");
+
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
+            statement.close();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

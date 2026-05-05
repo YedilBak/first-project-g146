@@ -29,7 +29,7 @@ public class BaseController {
     @PostMapping(value = "/add")
     public String addUser(BankUser user){
 
-        DBManager.addUser(user);
+        DBConnector.addUserToBase(user);
 
         return "redirect:/";
     }
@@ -51,7 +51,7 @@ public class BaseController {
     @PostMapping(value = "/update")
     public String updateUser(BankUser bankUser){
 
-        DBManager.updateUser(bankUser);
+        DBConnector.updateUser(bankUser);
 
         return "redirect:/";
     }
@@ -59,7 +59,7 @@ public class BaseController {
     @PostMapping(value = "/delete")
     public String deleteUser(@RequestParam int id){
 
-        DBManager.deleteUser(id);
+        DBConnector.deleteUser(id);
 
         return "redirect:/";
     }
