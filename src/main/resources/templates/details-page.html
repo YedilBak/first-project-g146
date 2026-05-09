@@ -31,7 +31,12 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-12">
-                        <input type="text" class="form-control" th:name="city" th:value="${user.city}">
+                        <select class="form-select" th:name="city.id">
+                            <option th:each="city: ${cities}"
+                                    th:text="${city.name}"
+                                    th:value="${city.id}"
+                                    th:selected="${city.id==user.city.id}"></option>
+                        </select>
                     </div>
                 </div>
                 <div class="row mt-2">

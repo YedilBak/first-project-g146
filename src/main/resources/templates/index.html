@@ -42,7 +42,11 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col-12">
-                                <input type="text" class="form-control" th:name="city">
+                                <select class="form-select" th:name="city.id">
+                                    <option th:each="city: ${cities}"
+                                            th:text="${city.name}"
+                                            th:value="${city.id}"></option>
+                                </select>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -92,7 +96,7 @@
         <tr th:each="user: ${users}">
             <td th:text="${user.id}"></td>
             <td th:text="${user.fullName}"></td>
-            <td th:text="${user.city}"></td>
+            <td th:text="${user.city.name + '/' + user.city.code}"></td>
             <td th:text="${user.rating}"></td>
             <td th:text="${user.iin}"></td>
             <td><a class="btn btn-secondary btn-sm" th:href="@{'/details/' + ${user.id}}">DETAILS</a></td>

@@ -13,13 +13,13 @@ public class DBManager {
     @Getter
     private static List<BankUser> users = new ArrayList<>();
 
-    static {
-        users.add(new BankUser(2, "Berik Berikov", "Astana", 7, 9301231239L));
-        users.add(new BankUser(3, "Merik Merikov", "Shymkent", 6, 671231233L));
-        users.add(new BankUser(4, "Jerik Jerikov", "Almaty", 10, 9501231239L));
-        users.add(new BankUser(5, "Kerik Kerikov", "Taraz", 2, 9801231239L));
-        users.add(new BankUser(6, "Lerik Lerikov", "Atirau", 1, 7301231239L));
-    }
+//    static {
+//        users.add(new BankUser(2, "Berik Berikov", "Astana", 7, 9301231239L));
+//        users.add(new BankUser(3, "Merik Merikov", "Shymkent", 6, 671231233L));
+//        users.add(new BankUser(4, "Jerik Jerikov", "Almaty", 10, 9501231239L));
+//        users.add(new BankUser(5, "Kerik Kerikov", "Taraz", 2, 9801231239L));
+//        users.add(new BankUser(6, "Lerik Lerikov", "Atirau", 1, 7301231239L));
+//    }
 
     public static void addUser(BankUser user) {
         user.setId(id++);

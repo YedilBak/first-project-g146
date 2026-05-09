@@ -17,6 +17,7 @@ public class BaseController {
     public String getMainPage(Model model){
 
         model.addAttribute("users", DBConnector.getAllUsersFromBase());
+        model.addAttribute("cities", DBConnector.getAllCities());
 
         return "index";
     }
@@ -35,7 +36,8 @@ public class BaseController {
     }
 
     @GetMapping(value = "/add")
-    public String addUserPage(){
+    public String addUserPage(Model model){
+        model.addAttribute("cities", DBConnector.getAllCities());
         return "add-page";
     }
 
@@ -44,6 +46,7 @@ public class BaseController {
                               @PathVariable int id){
 
         model.addAttribute("user", DBConnector.findBankUserById(id));
+        model.addAttribute("cities", DBConnector.getAllCities());
 
         return "details-page";
     }

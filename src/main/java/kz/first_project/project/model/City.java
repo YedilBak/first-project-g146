@@ -1,23 +1,20 @@
 package kz.first_project.project.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
-public class BankUser {
+public class City {
 
     private int id;
-    private String fullName;
-    private City city;
-    private double rating;
-    private long iin;
+    private String name;
+    private String code;
+    private String description;
+    private long countPeople;
 
 }
