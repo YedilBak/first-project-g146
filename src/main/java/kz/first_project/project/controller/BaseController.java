@@ -1,8 +1,9 @@
 package kz.first_project.project.controller;
 
-import kz.first_project.project.db.DBConnector;
-import kz.first_project.project.db.DBManager;
 import kz.first_project.project.model.BankUser;
+import kz.first_project.project.repository.CityRepository;
+import kz.first_project.project.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,13 +12,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequiredArgsConstructor
 public class BaseController {
+
+    private final UserRepository userRepository;
+    private final CityRepository cityRepository;
 
     @GetMapping(value = "/") //localhost:8080/
     public String getMainPage(Model model){
 
-        model.addAttribute("users", DBConnector.getAllUsersFromBase());
-        model.addAttribute("cities", DBConnector.getAllCities());
+        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("cities", cityRepository.findAll());
 
         return "index";
     }
@@ -30,14 +35,14 @@ public class BaseController {
     @PostMapping(value = "/add")
     public String addUser(BankUser user){
 
-        DBConnector.addUserToBase(user);
+        userRepository.save(user);
 
         return "redirect:/";
     }
 
     @GetMapping(value = "/add")
     public String addUserPage(Model model){
-        model.addAttribute("cities", DBConnector.getAllCities());
+        model.addAttribute("cities", cityRepository.findAll());
         return "add-page";
     }
 
@@ -45,8 +50,8 @@ public class BaseController {
     public String getUserByID(Model model,
                               @PathVariable int id){
 
-        model.addAttribute("user", DBConnector.findBankUserById(id));
-        model.addAttribute("cities", DBConnector.getAllCities());
+        model.addAttribute("user", userRepository.findById(id).orElseThrow());
+        model.addAttribute("cities", cityRepository.findAll());
 
         return "details-page";
     }
@@ -54,7 +59,7 @@ public class BaseController {
     @PostMapping(value = "/update")
     public String updateUser(BankUser bankUser){
 
-        DBConnector.updateUser(bankUser);
+       userRepository.save(bankUser);
 
         return "redirect:/";
     }
@@ -62,7 +67,7 @@ public class BaseController {
     @PostMapping(value = "/delete")
     public String deleteUser(@RequestParam int id){
 
-        DBConnector.deleteUser(id);
+        userRepository.deleteById(id);
 
         return "redirect:/";
     }
