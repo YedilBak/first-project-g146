@@ -1,27 +1,32 @@
 package kz.first_project.project.controller;
 
 import kz.first_project.project.model.BankUser;
+import kz.first_project.project.model2.User;
 import kz.first_project.project.repository.CityRepository;
-import kz.first_project.project.repository.UserRepository;
+import kz.first_project.project.repository.BankUserRepository;
+import kz.first_project.project.repository2.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping( "/v1")
 public class BaseController {
 
-    private final UserRepository userRepository;
+    private final BankUserRepository bankUserRepository;
     private final CityRepository cityRepository;
+    private final UserRepository userRepository;
 
     @GetMapping(value = "/") //localhost:8080/
     public String getMainPage(Model model){
 
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", bankUserRepository.findAll());
         model.addAttribute("cities", cityRepository.findAll());
 
         return "index";
@@ -33,11 +38,16 @@ public class BaseController {
     }
 
     @PostMapping(value = "/add")
-    public String addUser(BankUser user){
+    public String addBankUser(BankUser user){
+        bankUserRepository.save(user);
 
+        return "redirect:/v1/";
+    }
+
+    @PostMapping(value = "/add-user")
+    public String addUser(User user){
         userRepository.save(user);
-
-        return "redirect:/";
+        return "redirect:/v1/";
     }
 
     @GetMapping(value = "/add")
@@ -50,7 +60,7 @@ public class BaseController {
     public String getUserByID(Model model,
                               @PathVariable int id){
 
-        model.addAttribute("user", userRepository.findById(id).orElseThrow());
+        model.addAttribute("user", bankUserRepository.findById(id).orElseThrow());
         model.addAttribute("cities", cityRepository.findAll());
 
         return "details-page";
@@ -59,7 +69,7 @@ public class BaseController {
     @PostMapping(value = "/update")
     public String updateUser(BankUser bankUser){
 
-       userRepository.save(bankUser);
+       bankUserRepository.save(bankUser);
 
         return "redirect:/";
     }
@@ -67,7 +77,7 @@ public class BaseController {
     @PostMapping(value = "/delete")
     public String deleteUser(@RequestParam int id){
 
-        userRepository.deleteById(id);
+        bankUserRepository.deleteById(id);
 
         return "redirect:/";
     }

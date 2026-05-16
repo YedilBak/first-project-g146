@@ -11,7 +11,7 @@
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add">
-        ADD USER +
+        ADD BANK USER +
     </button>
 
     <!-- Modal -->
@@ -19,9 +19,9 @@
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" action="/add">
+                <form method="post" action="/v1/add">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">ADD USER</h1>
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel1">ADD USER</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -80,35 +80,90 @@
         </div>
     </div>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>FULL NAME</th>
-            <th>CITY</th>
-            <th>RATING</th>
-            <th>IIN</th>
-            <th style="width: 8%;">DETAILS</th>
-            <th style="width: 8%;">DELETE</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="user: ${users}">
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.fullName}"></td>
-            <td th:text="${user.city.name + '/' + user.city.code}"></td>
-            <td th:text="${user.rating}"></td>
-            <td th:text="${user.iin}"></td>
-            <td><a class="btn btn-secondary btn-sm" th:href="@{'/details/' + ${user.id}}">DETAILS</a></td>
-            <form action="/delete" method="post">
-                <input type="hidden" th:name="id" th:value="${user.id}">
-                <td>
-                    <button class="btn btn-danger btn-sm">DELETE</button>
-                </td>
-            </form>
-        </tr>
-        </tbody>
-    </table>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUser">
+        ADD USER +
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="/v1/add-user">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel2">ADD USER</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label>FULL NAME:</label>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <input type="text" class="form-control" th:name="fullName">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label>GPA:</label>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <input type="text" class="form-control" th:name="gpa">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label>IIN:</label>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <input type="text" class="form-control" th:name="iin">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                        <button type="submit" class="btn btn-success">ADD USER</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>FULL NAME</th>
+        <th>CITY</th>
+        <th>RATING</th>
+        <th>IIN</th>
+        <th style="width: 8%;">DETAILS</th>
+        <th style="width: 8%;">DELETE</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user: ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.fullName}"></td>
+        <td th:text="${user.city.name + '/' + user.city.code}"></td>
+        <td th:text="${user.rating}"></td>
+        <td th:text="${user.iin}"></td>
+        <td><a class="btn btn-secondary btn-sm" th:href="@{'/details/' + ${user.id}}">DETAILS</a></td>
+        <form action="/delete" method="post">
+            <input type="hidden" th:name="id" th:value="${user.id}">
+            <td>
+                <button class="btn btn-danger btn-sm">DELETE</button>
+            </td>
+        </form>
+    </tr>
+    </tbody>
+</table>
 </div>
 </body>
 </html>
