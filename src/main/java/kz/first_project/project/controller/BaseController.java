@@ -4,6 +4,7 @@ import kz.first_project.project.model.BankUser;
 import kz.first_project.project.model2.User;
 import kz.first_project.project.repository.CityRepository;
 import kz.first_project.project.repository.BankUserRepository;
+import kz.first_project.project.repository.PhoneNumberRepository;
 import kz.first_project.project.repository2.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,12 +23,14 @@ public class BaseController {
     private final BankUserRepository bankUserRepository;
     private final CityRepository cityRepository;
     private final UserRepository userRepository;
+    private final PhoneNumberRepository numberRepository;
 
     @GetMapping(value = "/") //localhost:8080/
     public String getMainPage(Model model){
 
         model.addAttribute("users", bankUserRepository.findAll());
         model.addAttribute("cities", cityRepository.findAll());
+        model.addAttribute("phones", numberRepository.findAll());
 
         return "index";
     }

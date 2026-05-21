@@ -143,6 +143,8 @@
         <th>CITY</th>
         <th>RATING</th>
         <th>IIN</th>
+        <th>PASSPORT</th>
+        <th>PHONE NUMBERS</th>
         <th style="width: 8%;">DETAILS</th>
         <th style="width: 8%;">DELETE</th>
     </tr>
@@ -154,6 +156,11 @@
         <td th:text="${user.city.name + '/' + user.city.code}"></td>
         <td th:text="${user.rating}"></td>
         <td th:text="${user.iin}"></td>
+        <td th:text="${user.passport.name +'/' + user.passport.number}"></td>
+        <div th:each="pHone: ${phones}">
+            <td th:if="${pHone.bankUser.id==user.id}"
+                 th:text="${pHone.number}"></td>
+        </div>
         <td><a class="btn btn-secondary btn-sm" th:href="@{'/details/' + ${user.id}}">DETAILS</a></td>
         <form action="/delete" method="post">
             <input type="hidden" th:name="id" th:value="${user.id}">
