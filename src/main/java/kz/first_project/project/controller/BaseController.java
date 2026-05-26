@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping( "/v1")
 public class BaseController {
 
     private final BankUserRepository bankUserRepository;
@@ -35,6 +34,16 @@ public class BaseController {
         return "index";
     }
 
+    @GetMapping(value = "/search")
+    public String getFilterUsers(Model model,
+                                 @RequestParam String word){
+
+        model.addAttribute("users", bankUserRepository.searchByWord(word));
+        model.addAttribute("cities", cityRepository.findAll());
+        model.addAttribute("phones", numberRepository.findAll());
+        return "index";
+    }
+
     @GetMapping(value = "/other") //localhost:8080/other
     public String getOtherPage(Model model){
         return "other-page";
@@ -44,13 +53,13 @@ public class BaseController {
     public String addBankUser(BankUser user){
         bankUserRepository.save(user);
 
-        return "redirect:/v1/";
+        return "redirect:/";
     }
 
     @PostMapping(value = "/add-user")
     public String addUser(User user){
         userRepository.save(user);
-        return "redirect:/v1/";
+        return "redirect:/";
     }
 
     @GetMapping(value = "/add")
