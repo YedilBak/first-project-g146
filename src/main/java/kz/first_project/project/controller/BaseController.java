@@ -2,6 +2,7 @@ package kz.first_project.project.controller;
 
 import kz.first_project.project.model.BankUser;
 import kz.first_project.project.model2.User;
+import kz.first_project.project.repository.BankUserCustomRepository;
 import kz.first_project.project.repository.CityRepository;
 import kz.first_project.project.repository.BankUserRepository;
 import kz.first_project.project.repository.PhoneNumberRepository;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -23,6 +23,7 @@ public class BaseController {
     private final CityRepository cityRepository;
     private final UserRepository userRepository;
     private final PhoneNumberRepository numberRepository;
+    private final BankUserCustomRepository bankUserCustomRepository;
 
     @GetMapping(value = "/") //localhost:8080/
     public String getMainPage(Model model){
@@ -92,6 +93,37 @@ public class BaseController {
         bankUserRepository.deleteById(id);
 
         return "redirect:/";
+    }
+
+
+    @GetMapping(value = "/rating-more")
+    public String getUsersByRatingMore(Model model,
+            @RequestParam double rating){
+
+       model.addAttribute("users", bankUserCustomRepository.findBankUsersByRatingGreaterThan(rating));
+
+       return "index";
+
+    }
+
+    @GetMapping(value = "/rating-name")
+    public String getUsersByRatingOrFullName(Model model,
+                                             @RequestParam(required = false) Double rating,
+                                             @RequestParam(required = false) String fullName){
+
+        model.addAttribute("users", bankUserCustomRepository
+                .findBankUsersByRatingAndFullName(rating, fullName));
+
+        return "index";
+    }
+
+    @GetMapping(value = "/rating-sort")
+    public String getUsersByRatingSort(Model model){
+
+        model.addAttribute("users", bankUserCustomRepository
+                .findBankUsersByRatingSort());
+
+        return "index";
     }
 
 

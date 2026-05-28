@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface BankUserRepository extends JpaRepository<BankUser, Integer> {
 
-    @Query("SELECT u FROM BankUser u WHERE u.fullName ilike concat('%', :word, '%') " +
-            "OR u.city.name ilike concat('%', :word, '%')")
-    List<BankUser> searchByWord(String word);
+    @Query("SELECT u FROM BankUser u WHERE u.fullName ilike concat('%', :w, '%') " +
+            "OR u.city.name ilike concat('%', :w, '%')")
+    List<BankUser> searchByWord(String w);
 }
