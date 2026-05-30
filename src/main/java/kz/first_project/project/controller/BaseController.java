@@ -8,6 +8,10 @@ import kz.first_project.project.repository.BankUserRepository;
 import kz.first_project.project.repository.PhoneNumberRepository;
 import kz.first_project.project.repository2.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +30,7 @@ public class BaseController {
     private final BankUserCustomRepository bankUserCustomRepository;
 
     @GetMapping(value = "/") //localhost:8080/
-    public String getMainPage(Model model){
+    public String getMainPage(Model model) {
 
         model.addAttribute("users", bankUserRepository.findAll());
         model.addAttribute("cities", cityRepository.findAll());
@@ -37,7 +41,7 @@ public class BaseController {
 
     @GetMapping(value = "/search")
     public String getFilterUsers(Model model,
-                                 @RequestParam String word){
+                                 @RequestParam String word) {
 
         model.addAttribute("users", bankUserRepository.searchByWord(word));
         model.addAttribute("cities", cityRepository.findAll());
@@ -46,32 +50,32 @@ public class BaseController {
     }
 
     @GetMapping(value = "/other") //localhost:8080/other
-    public String getOtherPage(Model model){
+    public String getOtherPage(Model model) {
         return "other-page";
     }
 
     @PostMapping(value = "/add")
-    public String addBankUser(BankUser user){
+    public String addBankUser(BankUser user) {
         bankUserRepository.save(user);
 
         return "redirect:/";
     }
 
     @PostMapping(value = "/add-user")
-    public String addUser(User user){
+    public String addUser(User user) {
         userRepository.save(user);
         return "redirect:/";
     }
 
     @GetMapping(value = "/add")
-    public String addUserPage(Model model){
+    public String addUserPage(Model model) {
         model.addAttribute("cities", cityRepository.findAll());
         return "add-page";
     }
 
     @GetMapping(value = "/details/{id}")
     public String getUserByID(Model model,
-                              @PathVariable int id){
+                              @PathVariable int id) {
 
         model.addAttribute("user", bankUserRepository.findById(id).orElseThrow());
         model.addAttribute("cities", cityRepository.findAll());
@@ -80,15 +84,15 @@ public class BaseController {
     }
 
     @PostMapping(value = "/update")
-    public String updateUser(BankUser bankUser){
+    public String updateUser(BankUser bankUser) {
 
-       bankUserRepository.save(bankUser);
+        bankUserRepository.save(bankUser);
 
         return "redirect:/";
     }
 
     @PostMapping(value = "/delete")
-    public String deleteUser(@RequestParam int id){
+    public String deleteUser(@RequestParam int id) {
 
         bankUserRepository.deleteById(id);
 
@@ -98,18 +102,18 @@ public class BaseController {
 
     @GetMapping(value = "/rating-more")
     public String getUsersByRatingMore(Model model,
-            @RequestParam double rating){
+                                       @RequestParam double rating) {
 
-       model.addAttribute("users", bankUserCustomRepository.findBankUsersByRatingGreaterThan(rating));
+        model.addAttribute("users", bankUserCustomRepository.findBankUsersByRatingGreaterThan(rating));
 
-       return "index";
+        return "index";
 
     }
 
     @GetMapping(value = "/rating-name")
     public String getUsersByRatingOrFullName(Model model,
                                              @RequestParam(required = false) Double rating,
-                                             @RequestParam(required = false) String fullName){
+                                             @RequestParam(required = false) String fullName) {
 
         model.addAttribute("users", bankUserCustomRepository
                 .findBankUsersByRatingAndFullName(rating, fullName));
@@ -118,7 +122,7 @@ public class BaseController {
     }
 
     @GetMapping(value = "/rating-sort")
-    public String getUsersByRatingSort(Model model){
+    public String getUsersByRatingSort(Model model) {
 
         model.addAttribute("users", bankUserCustomRepository
                 .findBankUsersByRatingSort());
@@ -126,5 +130,42 @@ public class BaseController {
         return "index";
     }
 
+    @GetMapping(value = "/sorted-pagination")
+    public String getAllUsersByPagination(Model model,
+                                          @RequestParam(defaultValue = "0") int page, //Номер страницы, по умолчанию указываем 0
+                                          @RequestParam(defaultValue = "5") int size, //Количество записей на странице, по умолчанию указываем 5
+                                          @RequestParam(defaultValue = "id") String param, //Параметр сортировки. по умолчанию 'id'
+                                          @RequestParam(defaultValue = "asc") String direction) {//Направление сортировки, по умолчанию 'asc'
+        Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(param).descending() : Sort.by(param).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<BankUser> usersPage = bankUserRepository.findAll(pageable);
+
+        model.addAttribute("users", usersPage.getContent());
+
+        return "index";
+
+    }
+
+
+    @GetMapping(value = "/rating-pagination")
+    public String getAllUsersByRatingPagination(Model model,
+                                          @RequestParam double rating,
+                                          @RequestParam(defaultValue = "1") int page,
+                                          @RequestParam(defaultValue = "2") int size,
+                                          @RequestParam(defaultValue = "id") String param,
+                                          @RequestParam(defaultValue = "asc") String direction) {
+        Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(param).descending() : Sort.by(param).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<BankUser> usersPage = bankUserRepository.findByRatingGreaterThan(rating, pageable);
+
+        model.addAttribute("users", usersPage.getContent());
+
+        return "index";
+
+    }
 
 }
