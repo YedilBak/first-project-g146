@@ -7,6 +7,10 @@ import kz.first_project.project.repository.CityRepository;
 import kz.first_project.project.repository.BankUserRepository;
 import kz.first_project.project.repository.PhoneNumberRepository;
 import kz.first_project.project.repository2.UserRepository;
+import kz.first_project.project.service.BankUserService;
+import kz.first_project.project.service.CityService;
+import kz.first_project.project.service.NumberService;
+import kz.first_project.project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,18 +27,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class BaseController {
 
-    private final BankUserRepository bankUserRepository;
-    private final CityRepository cityRepository;
-    private final UserRepository userRepository;
-    private final PhoneNumberRepository numberRepository;
-    private final BankUserCustomRepository bankUserCustomRepository;
+    private final BankUserService bankUserService;
+    private final CityService cityService;
+    private final NumberService numberService;
+    private final UserService userService;
 
     @GetMapping(value = "/") //localhost:8080/
     public String getMainPage(Model model) {
 
-        model.addAttribute("users", bankUserRepository.findAll());
-        model.addAttribute("cities", cityRepository.findAll());
-        model.addAttribute("phones", numberRepository.findAll());
+        model.addAttribute("users", bankUserService.getAllUsersFromBase());
+        model.addAttribute("cities", cityService.getAllCities());
+        model.addAttribute("phones", numberService.getAllPhones());
 
         return "index";
     }
@@ -43,9 +46,9 @@ public class BaseController {
     public String getFilterUsers(Model model,
                                  @RequestParam String word) {
 
-        model.addAttribute("users", bankUserRepository.searchByWord(word));
-        model.addAttribute("cities", cityRepository.findAll());
-        model.addAttribute("phones", numberRepository.findAll());
+        model.addAttribute("users", bankUserService.getAllUsersByWord(word));
+        model.addAttribute("cities", cityService.getAllCities());
+        model.addAttribute("phones", numberService.getAllPhones());
         return "index";
     }
 
@@ -56,20 +59,20 @@ public class BaseController {
 
     @PostMapping(value = "/add")
     public String addBankUser(BankUser user) {
-        bankUserRepository.save(user);
+        bankUserService.addUserToBase(user);
 
         return "redirect:/";
     }
 
     @PostMapping(value = "/add-user")
     public String addUser(User user) {
-        userRepository.save(user);
+        userService.addUserToBase(user);
         return "redirect:/";
     }
 
     @GetMapping(value = "/add")
     public String addUserPage(Model model) {
-        model.addAttribute("cities", cityRepository.findAll());
+        model.addAttribute("cities", cityService.getAllCities());
         return "add-page";
     }
 
@@ -77,8 +80,8 @@ public class BaseController {
     public String getUserByID(Model model,
                               @PathVariable int id) {
 
-        model.addAttribute("user", bankUserRepository.findById(id).orElseThrow());
-        model.addAttribute("cities", cityRepository.findAll());
+        model.addAttribute("user", bankUserService.getUserById(id));
+        model.addAttribute("cities", cityService.getAllCities());
 
         return "details-page";
     }
@@ -86,7 +89,7 @@ public class BaseController {
     @PostMapping(value = "/update")
     public String updateUser(BankUser bankUser) {
 
-        bankUserRepository.save(bankUser);
+        bankUserService.addUserToBase(bankUser);
 
         return "redirect:/";
     }
@@ -94,7 +97,7 @@ public class BaseController {
     @PostMapping(value = "/delete")
     public String deleteUser(@RequestParam int id) {
 
-        bankUserRepository.deleteById(id);
+        bankUserService.deleteUserById(id);
 
         return "redirect:/";
     }
@@ -104,7 +107,7 @@ public class BaseController {
     public String getUsersByRatingMore(Model model,
                                        @RequestParam double rating) {
 
-        model.addAttribute("users", bankUserCustomRepository.findBankUsersByRatingGreaterThan(rating));
+        model.addAttribute("users", bankUserService.findBankUsersByRatingGreaterThan(rating));
 
         return "index";
 
@@ -115,8 +118,7 @@ public class BaseController {
                                              @RequestParam(required = false) Double rating,
                                              @RequestParam(required = false) String fullName) {
 
-        model.addAttribute("users", bankUserCustomRepository
-                .findBankUsersByRatingAndFullName(rating, fullName));
+        model.addAttribute("users", bankUserService.findBankUsersByRatingAndFullName(rating, fullName));
 
         return "index";
     }
@@ -124,8 +126,7 @@ public class BaseController {
     @GetMapping(value = "/rating-sort")
     public String getUsersByRatingSort(Model model) {
 
-        model.addAttribute("users", bankUserCustomRepository
-                .findBankUsersByRatingSort());
+        model.addAttribute("users", bankUserService.findBankUsersByRatingSort());
 
         return "index";
     }
@@ -140,7 +141,7 @@ public class BaseController {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<BankUser> usersPage = bankUserRepository.findAll(pageable);
+        Page<BankUser> usersPage = bankUserService.findAll(pageable);
 
         model.addAttribute("users", usersPage.getContent());
 
@@ -160,7 +161,7 @@ public class BaseController {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<BankUser> usersPage = bankUserRepository.findByRatingGreaterThan(rating, pageable);
+        Page<BankUser> usersPage = bankUserService.findByRatingGreaterThan(rating, pageable);
 
         model.addAttribute("users", usersPage.getContent());
 
