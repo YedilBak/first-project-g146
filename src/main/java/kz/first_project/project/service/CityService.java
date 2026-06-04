@@ -1,8 +1,6 @@
 package kz.first_project.project.service;
 
 import kz.first_project.project.model.City;
-import kz.first_project.project.repository.CityRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,4 +10,14 @@ import java.util.List;
 public interface CityService {
 
     List<City> getAllCities();
+
+    City addCity(City city);
+
+    City updateCity(City city);
+
+    City updatePatch(String name, int id);
+
+    City getCity(int id);
+
+    void deleteCity(int id);
 }

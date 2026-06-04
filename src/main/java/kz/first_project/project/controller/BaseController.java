@@ -2,11 +2,6 @@ package kz.first_project.project.controller;
 
 import kz.first_project.project.model.BankUser;
 import kz.first_project.project.model2.User;
-import kz.first_project.project.repository.BankUserCustomRepository;
-import kz.first_project.project.repository.CityRepository;
-import kz.first_project.project.repository.BankUserRepository;
-import kz.first_project.project.repository.PhoneNumberRepository;
-import kz.first_project.project.repository2.UserRepository;
 import kz.first_project.project.service.BankUserService;
 import kz.first_project.project.service.CityService;
 import kz.first_project.project.service.NumberService;
