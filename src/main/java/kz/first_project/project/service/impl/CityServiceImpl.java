@@ -1,5 +1,6 @@
 package kz.first_project.project.service.impl;
 
+import kz.first_project.project.dto.CityDto;
 import kz.first_project.project.model.BankUser;
 import kz.first_project.project.model.City;
 import kz.first_project.project.repository.BankUserRepository;
@@ -9,6 +10,7 @@ import kz.first_project.project.service.CityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -54,5 +56,30 @@ public class CityServiceImpl implements CityService {
     @Override
     public void deleteCity(int id) {
         cityRepository.deleteById(id);
+    }
+
+    @Override
+    public CityDto toDto(City city) {
+
+        CityDto cityDto = new CityDto();
+        cityDto.setId(city.getId());
+        cityDto.setCodeCity(city.getCode());
+        cityDto.setNameCity(city.getName());
+        cityDto.setDescription(city.getDescription());
+        cityDto.setCountPeople(city.getCountPeople());
+
+        return cityDto;
+    }
+
+    @Override
+    public List<CityDto> toDtosList(List<City> cities) {
+
+        List<CityDto> cityDtoList = new ArrayList<>();
+
+        for(City city: cities){
+            cityDtoList.add(toDto(city));
+        }
+
+        return cityDtoList;
     }
 }

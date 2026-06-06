@@ -1,6 +1,7 @@
 package kz.first_project.project.controller;
 
-import kz.first_project.project.model.City;
+import kz.first_project.project.dto.CityDto;
+import kz.first_project.project.mapper.CityMapper;
 import kz.first_project.project.service.CityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,34 +23,35 @@ import java.util.List;
 public class CityRestController {
 
     private final CityService cityService;
+    private final CityMapper cityMapper;
 
     @GetMapping(value = "/")
-    public List<City> getAllCities(){
-        return cityService.getAllCities();
+    public List<CityDto> getAllCities(){
+        return cityMapper.toDtosList(cityService.getAllCities());
     }
 
     @PostMapping(value = "/add")
-    public City addCity(@RequestBody City city){
-        return cityService.addCity(city);
+    public CityDto addCity(@RequestBody CityDto city){
+        return cityMapper.toDto(cityService.addCity(cityMapper.toModel(city)));
     }
 
     @PutMapping(value = "/update")
-    public City updateCity(@RequestBody City city){
-        return cityService.updateCity(city);
+    public CityDto updateCity(@RequestBody CityDto city){
+        return cityMapper.toDto(cityService.updateCity(cityMapper.toModel(city)));
     }
 
 
     @GetMapping(value = "/get-city/{id}")
-    public City getCity(@PathVariable int id){
-        return cityService.getCity(id);
+    public CityDto getCity(@PathVariable int id){
+        return cityMapper.toDto(cityService.getCity(id));
     }
 
 
     @PatchMapping(value = "/update-patch")
-    public City updatePatchCity(@RequestParam String name,
+    public CityDto updatePatchCity(@RequestParam String name,
                                 @RequestParam int id){
 
-        return cityService.updatePatch(name, id);
+        return cityMapper.toDto(cityService.updatePatch(name, id));
 
     }
 

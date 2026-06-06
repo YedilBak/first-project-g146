@@ -1,5 +1,6 @@
 package kz.first_project.project.service;
 
+import kz.first_project.project.dto.CityDto;
 import kz.first_project.project.model.City;
 import org.springframework.stereotype.Service;
 
@@ -20,4 +21,8 @@ public interface CityService {
     City getCity(int id);
 
     void deleteCity(int id);
+
+    CityDto toDto(City city);
+
+    List<CityDto> toDtosList(List<City> cities);
 }

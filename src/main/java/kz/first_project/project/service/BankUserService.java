@@ -1,5 +1,6 @@
 package kz.first_project.project.service;
 
+import kz.first_project.project.dto.BankUserDto;
 import kz.first_project.project.model.BankUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,10 @@ public interface BankUserService {
     Page<BankUser> findAll(Pageable pageable);
 
     Page<BankUser> findByRatingGreaterThan(double rating, Pageable pageable);
+
+    BankUserDto toDto(BankUser bankUser);
+
+    List<BankUserDto> toDtoList(List<BankUser> bankUsers);
 
 
 }

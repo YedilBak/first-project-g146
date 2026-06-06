@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import kz.first_project.project.dto.BankUserDto;
 import kz.first_project.project.model.BankUser;
 import kz.first_project.project.repository.BankUserRepository;
 import kz.first_project.project.service.BankUserService;
@@ -109,5 +110,31 @@ public class BankUserServiceImpl implements BankUserService {
     @Override
     public Page<BankUser> findByRatingGreaterThan(double rating, Pageable pageable) {
         return bankUserRepository.findByRatingGreaterThan(rating, pageable);
+    }
+
+    @Override
+    public BankUserDto toDto(BankUser bankUser) {
+
+        BankUserDto bankUserDto = new BankUserDto();
+
+        bankUserDto.setId(bankUser.getId());
+        bankUserDto.setCity(bankUser.getCity());
+        bankUserDto.setIin(bankUser.getIin());
+        bankUserDto.setRating(bankUser.getRating());
+        bankUserDto.setNameSurname(bankUser.getFullName());
+
+        return bankUserDto;
+    }
+
+    @Override
+    public List<BankUserDto> toDtoList(List<BankUser> bankUsers) {
+
+        List<BankUserDto> bankUserDtos = new ArrayList<>();
+
+        for(BankUser user: bankUsers){
+            bankUserDtos.add(toDto(user));
+        }
+
+        return bankUserDtos;
     }
 }
